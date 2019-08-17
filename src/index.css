@@ -1,9 +1,9 @@
 body {
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI",
-    "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -221,5 +221,22 @@ body {
 
 .Login {
   text-align: center;
-  margin-top: 55px;
+  background: #4b214a;
+  width: 100%;
+  height: 100vh;
+  margin-top: 0;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#signUpbutton {
+  background: #458eb1;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  border-radius: 4px;
+  padding: 15px;
 }

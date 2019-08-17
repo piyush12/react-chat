@@ -15,7 +15,7 @@ const Login = () => {
 
   return (
     <div className="Login">
-      <button onClick={handleSignIn}>Sign in with Google</button>
+      <button onClick={handleSignIn} id="signUpbutton">Sign in with Google</button>
       {authError && (
         <div>
           <p>Error</p>
