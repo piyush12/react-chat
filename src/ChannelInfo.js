@@ -1,12 +1,14 @@
 import React from 'react';
+import useDocSnapShot from './customHooks/useDocSnapshot';
 
-function ChannelInfo() {
+function ChannelInfo({channelId}) {
+  const channel = useDocSnapShot(`channels/${channelId}`);
   return (
     <div className="ChannelInfo">
       <div className="Topic">
-        Topic: <input className="TopicInput" value="Awesome stuff" />
+        Topic: <input className="TopicInput" value={channel && channel.topic} />
       </div>
-      <div className="ChannelName">#general</div>
+      <div className="ChannelName">#{channelId}</div>
     </div>
   );
 }

@@ -1,72 +1,49 @@
-import React,{useState,useEffect} from 'react';
-import Nav from './Nav';
-import Channel from './Channel';
-import firebase from 'firebase';
+import React, { useState, useEffect } from "react";
+import { Router, Redirect } from "@reach/router";
+import Nav from "./Nav";
+import Channel from "./Channel";
+import { db, firebase, setupPresence } from "./firebase";
+import Login from "./Login";
 
 function App() {
-
   const user = useAuth();
 
-  return (
-    user ? (
-      <div className="App">
-        <Nav user={user}/>
-        <Channel />
-      </div>
-    ) :
-    (
-      <Login/>
-    )
+  return user ? (
+    <div className="App">
+      <Nav user={user} />
+      <Router>
+        <Channel path="/channel/:channelId" user={user} />
+        <Redirect from="/" to="/channel/general" />
+      </Router>
+    </div>
+  ) : (
+    <Login />
   );
 }
 
-function Login() {
-  const [authError, setauthError] = useState(null);
-
-  const handleSignIn = async () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    try{
-      await firebase.auth().signInWithPopup(provider)
-    }catch(error){
-      setauthError(error)
-    }
-    
-  }
-
-  return(
-    <div className="Login">
-      <button onClick={handleSignIn}>Sign in with Google</button>
-      {authError && 
-      <div>
-        <p>Error</p>
-        <p>{authError.message}</p>
-      </div>
-      }
-    </div>
-  )
-}
-
-
-function useAuth(){
+function useAuth() {
   const [user, setUser] = useState(null);
 
-    useEffect(() => {
-      return firebase.auth().onAuthStateChanged(user => {
-        if(user){
-          setUser({
-            displayName:user.displayName,
-            photoUrl:user.photoURL,
-            uid:user.uid
-          })
-          console.log(user)
-        }else{
-          setUser(null)
-        }
-      })
+  useEffect(() => {
+    return firebase.auth().onAuthStateChanged(firebaseUser => {
+      if (firebaseUser) {
+        const user = {
+          displayName: firebaseUser.displayName,
+          photoUrl: firebaseUser.photoURL,
+          uid: firebaseUser.uid
+        };
+        setUser(user);
+        db.collection("users")
+          .doc(user.uid)
+          .set(user, { merge: true });
+        setupPresence(user);
+      } else {
+        setUser(null);
+      }
+    });
+  }, []);
 
-    }, [])
-
-return user
+  return user;
 }
 
 export default App;
